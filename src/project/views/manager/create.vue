@@ -9,7 +9,6 @@
     <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="150px">
 
       <el-form-item label="姓名" prop="username">
-
         <el-input v-model="formValidate.username" placeholder="输入姓名"></el-input>
       </el-form-item>
       <el-form-item label="登录密码" prop="password">
@@ -66,13 +65,14 @@
         if (value === "") {
           callback(new Error("登录密码不能为空"));
         } else {
-          if (this.formValidate.password !== "") {
+          if (value !== "") {
             // 对第二个密码框单独验证
             this.$refs.formValidate.validateField("confirmPassword");
           }
           callback();
         }
       };
+      
       const validatePassCheck = (rule, value, callback) => {
         if (value === "") {
           callback(new Error("再次输入你的密码"));
