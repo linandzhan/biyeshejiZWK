@@ -122,7 +122,6 @@ export default {
         this.$refs.myQuillEditor.quill.insertEmbed(this.content !== null ? this.content.index : 0, 'image', url, Quill.sources.USER)
         console.log(url);
         console.log(this.content);
-
       })
     }
   }

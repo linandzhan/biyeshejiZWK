@@ -58,6 +58,7 @@
 				<el-table-column fixed="right" align="center" label="操作" width="200">
 					<template slot-scope="scope">
 						<el-button @click.stop="handleStatusChange(scope.row)" type="text" size="small">{{scope.row.type.indexOf('启用') >= 0 ? '禁用' : '启用'}}</el-button>
+						<!-- <el-button @click.stop="handleStatusChange(scope.row)" type="text" size="small">{{'扣费'}}</el-button> -->
 					</template>
 				</el-table-column>
 			</el-table>

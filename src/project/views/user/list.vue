@@ -71,50 +71,59 @@
           width="55">
         </el-table-column>
         <el-table-column
-
+          prop="userName"
           label="昵称"
         >
-          <template slot-scope="scope">
+          <!-- <template slot-scope="scope">
             <el-button
               @click.native.prevent="toDetail(scope.row)"
               type="text"
               size="small">
               {{scope.row.nickname}}
             </el-button>
-          </template>
+          </template> -->
         </el-table-column>
+
         <el-table-column
           prop="phone"
           label="手机号"
         >
         </el-table-column>
         <el-table-column
-          prop="createAt"
+          prop="creatTime"
           label="创建时间"
           sortable
         >
         </el-table-column>
         <el-table-column
+          prop="balance"
+          label="余额"
+        >
+        </el-table-column>
+
+        <el-table-column
           prop="status"
           label="状态"
         >
         </el-table-column>
+
         <el-table-column
           fixed="right"
           align="center"
           label="操作"
           width="200">
+
           <template slot-scope="scope">
-            <!-- <el-button @click.stop="handleStatusChange(scope.row)" type="text" size="small">{{scope.row.status.indexOf('启用') >= 0 ? '禁用' : '启用'}}</el-button> -->
+           <el-button @click.stop="handleStatusChange(scope.row)" type="text" size="small">{{scope.row.status.indexOf('启用') >= 0 ? '禁用' : '启用'}}</el-button>
+           <el-button @click.stop="handleStatusChange(scope.row)" type="text" size="small">{{'扣费'}}</el-button>
+                      <el-button @click.stop="handleStatusChange(scope.row)" type="text" size="small">{{'充值'}}</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-col>
-<!--    &lt;!&ndash;    新建&ndash;&gt;-->
-<!--    <i-create-->
-<!--      :dialog-visible="createProps.visible"-->
-<!--      @on-dialog-close="handleClose"-->
-<!--    />-->
+		<!--    新建-->
+		<i-create :dialog-visible="createProps.visible" @on-dialog-close="handleClose" @on-save-success="handleSave" />
+
 
 <!--    &lt;!&ndash;    编辑&ndash;&gt;-->
 <!--    <i-edit-->
@@ -138,7 +147,7 @@
     mixins: [Emitter],
     data() {
       return {
-        model: "user",
+        model: "userQueryDTO",
         createProps: {
           visible: false
         },
@@ -162,17 +171,17 @@
             key: "phone",
             type: "string"
           },
+          // {
+          //   name: "最近登录时间",
+          //   key: "accessAt",
+          //   type: "daterange",
+          // },
           {
-            name: "最近登录时间",
-            key: "accessAt",
-            type: "daterange",
-          },
-          {
-            name: "状态",
-            key: "status",
-            type: "select",
-            displayValue: ["禁用", "启用"],
-            value: ["禁用", "启用"]
+            name: "名字",
+            key: "userName",
+            type: "string",
+            // displayValue: ["禁用", "启用"],
+            // value: ["禁用", "启用"]
           }
         ]
       };
@@ -274,29 +283,33 @@
         this.search(1);
       },
       toCreate() {
+ //       console.log("sadasd")
         this.createProps.visible = true;
       },
       search(page) {
         let _t = this;
-        _t.page = page;
+        _t.extraParam.page = page;
+        _t.extraParam.size = _t.pageSize;
+        _t.extraParam.sort = 'id desc';
         let param = {
-          pageable: {
-            page: page,
-            size: _t.pageSize,
-            sort: _t.sort
-          },
+          // pageable: {
+          //   page: page,
+          //   size: _t.pageSize,
+          //   sort: _t.sort
+          // },
           [this.model]: _t.extraParam
         };
-        if (
-          param.pageable.sort.asc.length === 0 &&
-          param.pageable.sort.desc.length === 0
-        ) {
-          delete param.pageable.sort;
-        }
+        // if (
+        //   _t.sort.asc.length === 0 &&
+        //   _t.sort.desc.length === 0
+        // ) {
+        //   delete param.pageable.sort;
+        // }
         search(param, res => {
-          let data = res;
+          let data = res.data.items;
           _t.data = data;
-          _t.getTotal();
+          _t.total = res.data.total;
+//          _t.getTotal();
         });
       },
       getTotal() {
@@ -410,6 +423,11 @@
         this.createProps.visible = false;
         this.editProps.visible = false;
       },
+      handleSave() {
+				this.createProps.visible = false;
+				this.editProps.visible = false;
+				this.search(this.page);
+			},
       handleSelectionChange(val) {
         this.selectList = val;
       },
