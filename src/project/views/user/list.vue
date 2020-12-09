@@ -138,7 +138,7 @@
               }}</el-button
             >
             <el-button
-              @click.stop="handleStatusChange(scope.row)"
+              @click="toReduce(scope.row)"
               type="text"
               size="small"
               >{{ "扣费" }}</el-button
@@ -160,6 +160,15 @@
       @on-save-success="handleSave"
     />
 
+    <!-- 扣费 -->
+    <i-reduce
+      :dialog-visible="reduceProps.visible"
+      :id="reduceId"
+      @on-dialog-close="handleClose"
+      @on-save-success="handleSave"
+    />
+
+
     <!--    &lt;!&ndash;    编辑&ndash;&gt;-->
     <!--    <i-edit-->
     <!--      :dialog-visible="editProps.visible"-->
@@ -171,6 +180,7 @@
 <script>
 import Search from "@/framework/components/search";
 import ICreate from "./create";
+import IReduce from "./reduce";
 // import IEdit from "./edit"
 import { post } from "@/framework/http/request";
 import Emitter from "@/framework/mixins/emitter";
@@ -187,10 +197,14 @@ export default {
       editProps: {
         visible: false,
       },
+      reduceProps: {
+        visible: false,
+      },
       menu: {
         visible: false,
       },
       editId: 0, //编辑id
+      reduceId: 0,
       data: [],
       selectList: [],
       sort: { asc: [], desc: [] },
@@ -227,6 +241,7 @@ export default {
   components: {
     Search,
     ICreate,
+    IReduce,
   },
   methods: {
     handleEdit() {
@@ -321,6 +336,11 @@ export default {
     toCreate() {
       //       console.log("sadasd")
       this.createProps.visible = true;
+    },
+    toReduce(row) {
+      console.log(row.userId);
+      this.reduceId = row.userId;
+      this.reduceProps.visible = true;
     },
     search(page) {
       let _t = this;
@@ -482,10 +502,12 @@ export default {
     handleClose() {
       this.createProps.visible = false;
       this.editProps.visible = false;
+      this.reduceProps.visible = false;
     },
     handleSave() {
       this.createProps.visible = false;
       this.editProps.visible = false;
+      this.reduceProps.visible = false;
       this.search(this.page);
     },
     handleSelectionChange(val) {

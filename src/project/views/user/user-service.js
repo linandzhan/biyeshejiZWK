@@ -8,6 +8,19 @@ let batchDeleteUrl = `api/${model}/delete`;
 let enableUrl = `api/${model}/enable`;
 let disableUrl = `api/${model}/disable`;
 let saveUrl = `api/${model}/save`;
+let culculateDiscountUrl = `api/${model}/culculateDiscount`;
+
+
+export function culculateDiscount(param, callback) {
+  axios.post(culculateDiscountUrl, param).then(data => {
+    if (data !== undefined && data !== '' && data !== null) {
+      // callback when data is exist
+      callback(data)
+    }
+  })
+}
+
+
 
 export function get(param, callback) {
   axios.post(getUrl, param).then(data => {
