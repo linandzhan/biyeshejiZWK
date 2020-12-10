@@ -9,6 +9,8 @@ let enableUrl = `api/${model}/enable`;
 let disableUrl = `api/${model}/disable`;
 let saveUrl = `api/${model}/save`;
 let culculateDiscountUrl = `api/${model}/culculateDiscount`;
+let reduceBalanceUrl = `api/${model}/reduceBalance`
+let rechargeBalanceUrl = `api/${model}/rechargeBalance`
 
 
 export function culculateDiscount(param, callback) {
@@ -19,6 +21,25 @@ export function culculateDiscount(param, callback) {
     }
   })
 }
+
+export function reduceBalance(param, callback) {
+  axios.post(reduceBalanceUrl, param).then(data => {
+    if (data !== undefined && data !== '' && data !== null) {
+      // callback when data is exist
+      callback(data)
+    }
+  })
+}
+
+export function rechargeBalance(param, callback) {
+  axios.post(rechargeBalanceUrl, param).then(data => {
+    if (data !== undefined && data !== '' && data !== null) {
+      // callback when data is exist
+      callback(data)
+    }
+  })
+}
+
 
 
 

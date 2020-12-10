@@ -35,12 +35,12 @@
               icon="el-icon-circle-check"
               command="启用"
               :disabled="
-                selectList.findIndex((s) => {
+                selectList.findIndex(s => {
                   return s.status === '启用';
                 }) >= 0 || selectList.length === 0
               "
               :style="
-                selectList.findIndex((s) => {
+                selectList.findIndex(s => {
                   return s.status === '启用';
                 }) >= 0 || selectList.length === 0
                   ? { color: 'rgba(255,255,255,0.4)', cursor: 'not-allowed' }
@@ -54,12 +54,12 @@
               icon="el-icon-circle-close"
               command="禁用"
               :disabled="
-                selectList.findIndex((s) => {
+                selectList.findIndex(s => {
                   return s.status === '禁用';
                 }) >= 0 || selectList.length === 0
               "
               :style="
-                selectList.findIndex((s) => {
+                selectList.findIndex(s => {
                   return s.status === '禁用';
                 }) >= 0 || selectList.length === 0
                   ? { color: 'rgba(255,255,255,0.4)' }
@@ -137,14 +137,13 @@
                 scope.row.status.indexOf("启用") >= 0 ? "禁用" : "启用"
               }}</el-button
             >
+            <el-button @click="toReduce(scope.row)" type="text" size="small">{{
+              "扣费"
+            }}</el-button>
+
+
             <el-button
-              @click="toReduce(scope.row)"
-              type="text"
-              size="small"
-              >{{ "扣费" }}</el-button
-            >
-            <el-button
-              @click.stop="handleStatusChange(scope.row)"
+              @click="toRecharge(scope.row)"
               type="text"
               size="small"
               >{{ "充值" }}</el-button
@@ -168,6 +167,13 @@
       @on-save-success="handleSave"
     />
 
+    <!-- 充值 -->
+    <i-recharge
+      :dialog-visible="rechargeProps.visible"
+      :id="rechargeId"
+      @on-dialog-close="handleClose"
+      @on-save-success="handleSave"
+    />
 
     <!--    &lt;!&ndash;    编辑&ndash;&gt;-->
     <!--    <i-edit-->
@@ -181,6 +187,7 @@
 import Search from "@/framework/components/search";
 import ICreate from "./create";
 import IReduce from "./reduce";
+import IRecharge from "./recharge";
 // import IEdit from "./edit"
 import { post } from "@/framework/http/request";
 import Emitter from "@/framework/mixins/emitter";
@@ -192,19 +199,23 @@ export default {
     return {
       model: "userQueryDTO",
       createProps: {
-        visible: false,
+        visible: false
       },
       editProps: {
-        visible: false,
+        visible: false
       },
       reduceProps: {
-        visible: false,
+        visible: false
+      },
+      rechargeProps: {
+        visible: false
       },
       menu: {
-        visible: false,
+        visible: false
       },
       editId: 0, //编辑id
       reduceId: 0,
+      rechargeId: 0,
       data: [],
       selectList: [],
       sort: { asc: [], desc: [] },
@@ -216,7 +227,7 @@ export default {
         {
           name: "手机号",
           key: "phone",
-          type: "string",
+          type: "string"
         },
         // {
         //   name: "最近登录时间",
@@ -226,22 +237,23 @@ export default {
         {
           name: "名字",
           key: "userName",
-          type: "string",
+          type: "string"
           // displayValue: ["禁用", "启用"],
           // value: ["禁用", "启用"]
-        },
-      ],
+        }
+      ]
     };
   },
   computed: {
     route() {
       return this.$route;
-    },
+    }
   },
   components: {
     Search,
     ICreate,
     IReduce,
+    IRecharge
   },
   methods: {
     handleEdit() {
@@ -260,22 +272,22 @@ export default {
       this.$confirm(`确定${status}选中内容？`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(() => {
           if (status === "禁用") {
-            disable({ id: row.userId }, (res) => {
+            disable({ id: row.userId }, res => {
               _t.$message({
                 type: "success",
-                message: "已禁用!",
+                message: "已禁用!"
               });
               _t.search(_t.page);
             });
           } else {
-            enable({ id: row.userId }, (res) => {
+            enable({ id: row.userId }, res => {
               _t.$message({
                 type: "success",
-                message: "已启用!",
+                message: "已启用!"
               });
               _t.search(_t.page);
             });
@@ -284,7 +296,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除",
+            message: "已取消删除"
           });
         });
     },
@@ -342,6 +354,11 @@ export default {
       this.reduceId = row.userId;
       this.reduceProps.visible = true;
     },
+    toRecharge(row) {
+      console.log(row.userId)
+      this.rechargeId = row.userId;
+      this.rechargeProps.visible = true;
+    },
     search(page) {
       let _t = this;
       _t.extraParam.page = page;
@@ -353,7 +370,7 @@ export default {
         //   size: _t.pageSize,
         //   sort: _t.sort
         // },
-        [this.model]: _t.extraParam,
+        [this.model]: _t.extraParam
       };
       // if (
       //   _t.sort.asc.length === 0 &&
@@ -361,7 +378,7 @@ export default {
       // ) {
       //   delete param.pageable.sort;
       // }
-      search(param, (res) => {
+      search(param, res => {
         let data = res.data.items;
         _t.data = data;
         _t.total = res.data.total;
@@ -379,20 +396,20 @@ export default {
         } else {
           data[i].status = "禁用";
         }
-        
-        if(_level == "low") {
-          data[i].level = "初级"
-        }else if(_level == "middle"){
-          data[i].level = "中级"
-        }else if(_level == "high") {
-          data[i].level = "高级"
+
+        if (_level == "low") {
+          data[i].level = "初级";
+        } else if (_level == "middle") {
+          data[i].level = "中级";
+        } else if (_level == "high") {
+          data[i].level = "高级";
         }
       }
     },
     getTotal() {
       let _t = this;
       let param = { [this.model]: _t.extraParam };
-      count(param, (res) => {
+      count(param, res => {
         _t.total = parseInt(res);
       });
     },
@@ -406,28 +423,28 @@ export default {
         let selectList = this.selectList;
         if (selectList.length === 0) {
           this.$notify.warning({
-            title: "至少选择一条数据",
+            title: "至少选择一条数据"
           });
           return;
         }
         this.$confirm("确定删除所选记录吗?", "删除提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning",
+          type: "warning"
         })
           .then(() => {
-            del({ ids: ids }, (res) => {
+            del({ ids: ids }, res => {
               _t.search(_t.page);
               this.$message({
                 type: "success",
-                message: "删除成功!",
+                message: "删除成功!"
               });
             });
           })
           .catch(() => {
             this.$message({
               type: "info",
-              message: "已取消删除",
+              message: "已取消删除"
             });
           });
       });
@@ -439,11 +456,11 @@ export default {
       this.$confirm("确定启用所选的记录吗?", "启用提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(() => {
-          selectList.map((s) => {
-            enable({ id: s.userId }, (res) => {
+          selectList.map(s => {
+            enable({ id: s.userId }, res => {
               _t.search(_t.page);
               // this.$message({
               //   type: 'success',
@@ -455,7 +472,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消",
+            message: "已取消"
           });
         });
     },
@@ -466,11 +483,11 @@ export default {
       this.$confirm("确定启用所选的记录吗?", "启用提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(() => {
-          selectList.map((s) => {
-            disable({ id: s.userId }, (res) => {
+          selectList.map(s => {
+            disable({ id: s.userId }, res => {
               _t.search(_t.page);
               // this.$message({
               //   type: 'success',
@@ -482,20 +499,20 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消",
+            message: "已取消"
           });
         });
     },
 
     delete(id) {
       let _t = this;
-      del({ id: id }, (res) => {
+      del({ id: id }, res => {
         _t.search(_t.page);
       });
     },
     enable(id, url) {
       let _t = this;
-      post(url, { id: id }, (res) => {
+      post(url, { id: id }, res => {
         _t.search(_t.page);
       });
     },
@@ -503,11 +520,13 @@ export default {
       this.createProps.visible = false;
       this.editProps.visible = false;
       this.reduceProps.visible = false;
+      this.rechargeProps.visible = false;
     },
     handleSave() {
       this.createProps.visible = false;
       this.editProps.visible = false;
       this.reduceProps.visible = false;
+      this.rechargeProps.visible = false;
       this.search(this.page);
     },
     handleSelectionChange(val) {
@@ -550,12 +569,12 @@ export default {
           this.batchDisable();
           break;
       }
-    },
+    }
   },
   mounted() {
     this.search(1);
     // this.findAllRoles();
-  },
+  }
 };
 </script>
 <style lang="less" scoped>
