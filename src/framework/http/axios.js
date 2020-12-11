@@ -83,7 +83,15 @@ instance.interceptors.response.use(
       } else if (res.code === 401) {
         // handle token is expired
         router.push("/login")
-      } else {
+      }else if (res.status == 403) {
+        Notification({
+          title: '警告',
+          message: `你无权访问`,
+          type: 'warning'
+        })
+      }
+      
+      else {
         // handle code is not 200
         Notification({
           title: '警告',
