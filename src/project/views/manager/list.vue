@@ -3,48 +3,84 @@
     <!--    搜索-->
     <el-col :span="24">
       <search
-        style="width: 95%;margin: 20px auto"
+        style="width: 95%; margin: 20px auto"
         :search-items="searchItems"
         @on-search="searchBySearchItem"
       ></search>
     </el-col>
     <!--    按钮和分页-->
     <el-col :span="24">
-      <div style="width: 95%;margin:0 auto 20px auto;">
+      <div style="width: 95%; margin: 0 auto 20px auto">
         <!-- <el-button @click="demo">{{$t('message.projectName')}}</el-button> -->
-        <el-button icon="el-icon-plus" type="primary" @click="toCreate">新建</el-button>
+        <el-button icon="el-icon-plus" type="primary" @click="toCreate"
+          >新建</el-button
+        >
         <el-dropdown
           :trigger="'click'"
           @command="handleClick"
           size="medium"
           @visible-change="onMenuChange"
         >
-          <el-button icon="el-icon-menu" style="background:#3e5265;color: white ">
+          <el-button
+            icon="el-icon-menu"
+            style="background: #3e5265; color: white"
+          >
             更多操作
-            <i :class="menu.visible?'el-icon-caret-top':'el-icon-caret-bottom'"></i>
+            <i
+              :class="
+                menu.visible ? 'el-icon-caret-top' : 'el-icon-caret-bottom'
+              "
+            ></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               icon="el-icon-circle-check"
               command="启用"
-              :disabled="selectList.findIndex(s=>{return s.status === '启用'}) >=0 || selectList.length === 0"
-              :style="(selectList.findIndex(s=>{return s.status === '启用'}) >=0 || selectList.length === 0)?{'color':'rgba(255,255,255,0.4)','cursor': 'not-allowed'}:{'color':'#fff'}"
+              :disabled="
+                selectList.findIndex((s) => {
+                  return s.status === '启用';
+                }) >= 0 || selectList.length === 0
+              "
+              :style="
+                selectList.findIndex((s) => {
+                  return s.status === '启用';
+                }) >= 0 || selectList.length === 0
+                  ? { color: 'rgba(255,255,255,0.4)', cursor: 'not-allowed' }
+                  : { color: '#fff' }
+              "
               @click="batchEnable"
-            >启用</el-dropdown-item>
+              >启用</el-dropdown-item
+            >
             <el-dropdown-item
               icon="el-icon-circle-close"
               command="禁用"
-              :disabled="selectList.findIndex(s=>{return s.status === '禁用'}) >=0 || selectList.length === 0"
-              :style="(selectList.findIndex(s=>{return s.status === '禁用'}) >=0 || selectList.length === 0)?{'color':'rgba(255,255,255,0.4)'}:{'color':'#fff'}"
+              :disabled="
+                selectList.findIndex((s) => {
+                  return s.status === '禁用';
+                }) >= 0 || selectList.length === 0
+              "
+              :style="
+                selectList.findIndex((s) => {
+                  return s.status === '禁用';
+                }) >= 0 || selectList.length === 0
+                  ? { color: 'rgba(255,255,255,0.4)' }
+                  : { color: '#fff' }
+              "
               @click.stop="batchDisable"
-            >禁用</el-dropdown-item>
+              >禁用</el-dropdown-item
+            >
             <el-dropdown-item
               icon="el-icon-edit"
               command="编辑"
               :disabled="selectList.length !== 1"
-              :style="(selectList.length !== 1)?{'color':'rgba(255,255,255,0.4)'}:{'color':'#fff'}"
+              :style="
+                selectList.length !== 1
+                  ? { color: 'rgba(255,255,255,0.4)' }
+                  : { color: '#fff' }
+              "
               @click.stop="handleEdit"
-            >编辑</el-dropdown-item>
+              >编辑</el-dropdown-item
+            >
           </el-dropdown-menu>
         </el-dropdown>
         <div class="pager-group">
@@ -64,7 +100,7 @@
     <el-col :span="24">
       <el-table
         :data="data"
-        style="width: 95%;margin:0 auto;"
+        style="width: 95%; margin: 0 auto"
         @selection-change="handleSelectionChange"
         @row-dblclick="handleRowClick"
       >
@@ -87,7 +123,10 @@
               @click.stop="handleStatusChange(scope.row)"
               type="text"
               size="small"
-            >{{scope.row.type.indexOf('启用') >= 0 ? '禁用' : '启用'}}</el-button>
+              >{{
+                scope.row.type.indexOf("启用") >= 0 ? "禁用" : "启用"
+              }}</el-button
+            >
             <!-- <el-button @click.stop="handleStatusChange(scope.row)" type="text" size="small">{{'扣费'}}</el-button> -->
           </template>
         </el-table-column>
@@ -123,20 +162,20 @@ export default {
     return {
       model: "employeeQuery",
       createProps: {
-        visible: false
+        visible: false,
       },
       editProps: {
-        visible: false
+        visible: false,
       },
       menu: {
-        visible: false
+        visible: false,
       },
       editId: 0, //编辑id
       data: [],
       selectList: [],
       sort: {
         asc: [],
-        desc: []
+        desc: [],
       },
       pageSize: 10,
       page: 1,
@@ -147,7 +186,7 @@ export default {
         {
           name: "用户名",
           key: "username",
-          type: "string"
+          type: "string",
         },
         // {
         // 	name: "姓名",
@@ -166,38 +205,38 @@ export default {
           key: "type",
           type: "select",
           displayValue: ["禁用", "启用"],
-          value: ["禁用", "启用"]
-        }
-      ]
+          value: ["禁用", "启用"],
+        },
+      ],
     };
   },
   computed: {
     route() {
       return this.$route;
-    }
+    },
   },
   components: {
     Search,
     ICreate,
-    IEdit
+    IEdit,
   },
   methods: {
     demo() {
       this.$confirm(this.$t("message.system"), "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "删除成功!",
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -216,38 +255,39 @@ export default {
       this.$confirm(`确定${status}选中内容？`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           if (status === "禁用") {
             disable(
               {
-                id: row.id
+                id: row.id,
               },
-              res => {
+              (res) => {
                 _t.$message({
                   type: "success",
-                  message: "已禁用!"
+                  message: "已禁用!",
                 });
                 _t.search(_t.page);
               }
             );
           } else {
-            console.log(row.id);
+        //    console.log(row.id);
             enable(
               {
-                id: row.id
+                id: row.id,
               },
-              res => {
+              (res) => {
+    //            console.log(res)
                 if (res.code == 200) {
                   _t.$message({
                     type: "success",
-                    message: res.msg
+                    message: res.msg,
                   });
                 } else {
                   _t.$message({
                     type: "error",
-                    message: res.msg
+                    message: res.msg,
                   });
                 }
 
@@ -259,7 +299,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -337,7 +377,7 @@ export default {
         // 	size: _t.pageSize,
         // 	sort: _t.sort
         // },
-        [this.model]: _t.extraParam
+        [this.model]: _t.extraParam,
       };
       // if (_t.extraParam.roleId) {
       // 	param.roleId = _t.extraParam.roleId;
@@ -350,7 +390,7 @@ export default {
       // 	delete param.pageable.sort;
       // }
       console.log(param);
-      search(param, res => {
+      search(param, (res) => {
         let data = res;
         // console.log(data)
         _t.data = data.data.items;
@@ -378,22 +418,22 @@ export default {
         let selectList = this.selectList;
         if (selectList.length === 0) {
           this.$notify.warning({
-            title: "至少选择一条数据"
+            title: "至少选择一条数据",
           });
           return;
         }
         this.$confirm("确定删除所选记录吗?", "删除提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
         })
           .then(() => {
             selectList.forEach((item, index) => {
               del(
                 {
-                  id: item.id
+                  id: item.id,
                 },
-                res => {
+                (res) => {
                   if (selectList.length - 1 === index) {
                     this.$message.success("删除成功");
                     this.search(this.page);
@@ -405,7 +445,7 @@ export default {
           .catch(() => {
             this.$message({
               type: "info",
-              message: "已取消删除"
+              message: "已取消删除",
             });
           });
       });
@@ -417,15 +457,15 @@ export default {
       this.$confirm("确定启用所选的记录吗?", "启用提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
-          selectList.map(s => {
+          selectList.map((s) => {
             enable(
               {
-                id: s.id
+                id: s.id,
               },
-              res => {
+              (res) => {
                 _t.search(_t.page);
                 // this.$message({
                 //   type: 'success',
@@ -438,7 +478,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消"
+            message: "已取消",
           });
         });
     },
@@ -449,15 +489,15 @@ export default {
       this.$confirm("确定启用所选的记录吗?", "启用提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
-          selectList.map(s => {
+          selectList.map((s) => {
             disable(
               {
-                id: s.id
+                id: s.id,
               },
-              res => {
+              (res) => {
                 _t.search(_t.page);
                 // this.$message({
                 //   type: 'success',
@@ -470,7 +510,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消"
+            message: "已取消",
           });
         });
     },
@@ -479,9 +519,9 @@ export default {
       let _t = this;
       del(
         {
-          id: id
+          id: id,
         },
-        res => {
+        (res) => {
           _t.search(_t.page);
         }
       );
@@ -491,9 +531,9 @@ export default {
       post(
         url,
         {
-          id: id
+          id: id,
         },
-        res => {
+        (res) => {
           _t.search(_t.page);
         }
       );
@@ -516,7 +556,7 @@ export default {
     },
     toDetail(row) {
       this.$router.push({
-        path: "/manager/show/" + row.id
+        path: "/manager/show/" + row.id,
       });
     },
     handleCurrentChange(val) {
@@ -547,7 +587,7 @@ export default {
           this.batchDisable();
           break;
       }
-    }
+    },
     // roleSearch() {
     // 	post(`api/role/search`, {
     // 			role: {},
@@ -576,8 +616,8 @@ export default {
     this.search(1);
     console.log("321321321", this.extraParam);
 
-    this.roleSearch();
-  }
+    // this.roleSearch();
+  },
 };
 </script>
 <style lang="less" scoped>

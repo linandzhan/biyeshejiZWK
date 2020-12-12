@@ -1,0 +1,20 @@
+      {
+        "displayName": "角色管理",
+        "link": "/role/list",
+        "mid": 0
+      },
+      {
+        "displayName": "APP版本管理",
+        "link": "/version/list",
+        "mid": 0
+      },
+	  {
+	    "displayName": "模块管理",
+	    "link": "/module/list",
+	    "mid": 0
+	  },
+	  {
+	    "displayName": "权限管理",
+	    "link": "/permission/list",
+	    "mid": 0
+	  }

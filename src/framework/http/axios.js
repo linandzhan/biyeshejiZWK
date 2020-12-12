@@ -56,6 +56,7 @@ instance.interceptors.request.use(
   },
   error => {
     // Do something with request error
+    console.log(111);
     console.log("request", error);
     Notification({
       title: '错误',
@@ -70,6 +71,13 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     let res = response.data;
+    if(res == 'no-permission'){
+      Notification({
+        title: '警告',
+        message: `${res}`,
+        type: 'warning'
+      })
+    }
     let code = res.code;
   //  console.log(code)
   //  console.log(res.data)
@@ -83,7 +91,8 @@ instance.interceptors.response.use(
       } else if (res.code === 401) {
         // handle token is expired
         router.push("/login")
-      }else if (res.status == 403) {
+      }else if (res.status == 500) {
+        // console.log("sdsds");
         Notification({
           title: '警告',
           message: `你无权访问`,
