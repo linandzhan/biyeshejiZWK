@@ -46,6 +46,29 @@ const advice = {
       },
       component: () => import('@/project/views/advice/show')
     },
+    {
+      path:'/advice/statistics',
+      name:'adviceShow',
+      meta:{
+        isShowHeader:true,
+        isShowLeftSider:true,
+        breadcrumb: [
+          {
+            name:'首页',
+            path:'/index'
+          },
+          {
+            name:'意见反馈',
+            path:'/advice/list'
+          },
+          {
+            name:'意见反馈详情',
+            path:'/advice/show/:id'
+          }
+        ]
+      },
+      component: () => import('@/project/views/advice/statistics')
+    },
 
   ]
 }

@@ -29,17 +29,17 @@
     ]
   },
   {
-    "displayName": "场地管理",
+    "displayName": "球馆运营",
     "icon": "el-icon-basketball",
     "mid": 1,
     "children": [
       {
-        "displayName": "场地查询",
+        "displayName": "场内情况",
         "link": "/page/system/list",
         "mid": 0
       },
       {
-        "displayName": "租场查询",
+        "displayName": "租场预约查询",
         "link": "/page/help/list",
         "mid": 0
       }
@@ -57,7 +57,7 @@
       },
       {
         "displayName": "统计查询",
-        "link": "/advice/list",
+        "link": "/advice/statistics",
         "mid": 0
       }
     ]
