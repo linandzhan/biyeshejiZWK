@@ -31,7 +31,7 @@
             </el-dropdown-item>
           </el-dropdown-menu> -->
         <!-- </el-dropdown> -->
-        <div class="pager-group">
+        <!-- <div class="pager-group">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -42,25 +42,47 @@
             :total="total"
           >
           </el-pagination>
-        </div>
+        </div> -->
       </div>
     </el-col>
 
     <el-col :span="24" :data="data">
       <div>
         <el-row>
-          <el-col class="header"> 
+          <el-col class="header">
             预约查询
-          </el-col>  
+          </el-col>
         </el-row>
-        
 
         <el-row class="mybox">
-            <el-col :span="6"  v-for="(item,index) in grounds" :key="index" class="mygroud">
-              <div :class='{red: item == 2}' style='width:100%;height: 100%;'>{{item}}</div>
-              <!-- <div class="grid-content bg-purple" v-for="item in list">{{item}}</div> -->
-              <!-- 返回boolean类型，true的话就展示red样式，false的话就不展示red样式 -->
-             </el-col> 
+          <el-col
+            :span="6"
+            v-for="(item, index) in grounds"
+            :key="index"
+            class="mygroud"
+          >
+            <div
+              :class="{ red: item.isSpare == false }"
+              style="width:100%;height: 100%;text-align:center;"
+            >
+              {{ item.number }}
+              <br />
+              <span v-if="item.isSpare == false">
+                被预定
+              </span>
+              <span v-if="item.isSpare == true">
+                可预定
+              </span>
+              <br />
+              {{ item.type }}
+             <br>
+              <span v-if="item.isSpare == false" class="userNameClass">
+                预约人：{{ item.userName }}
+              </span>
+            </div>
+            <!-- <div class="grid-content bg-purple" v-for="item in list">{{item}}</div> -->
+            <!-- 返回boolean类型，true的话就展示red样式，false的话就不展示red样式 -->
+          </el-col>
         </el-row>
       </div>
     </el-col>
@@ -68,7 +90,6 @@
     <!--    表格-->
     <!-- <el-col :span="24"> -->
     <el-col :span="24"> </el-col>
-
 
     <!--    新建-->
     <i-create
@@ -92,7 +113,7 @@ import IEdit from "./edit";
 import ICreate from "./create";
 import { post } from "@/framework/http/request";
 import Emitter from "@/framework/mixins/emitter";
-import { search, count, del } from "../page-service"; //接口
+import { search, count, del, periodIdSearch } from "../page-service"; //接口
 import { findById } from "../../user/user-service";
 
 export default {
@@ -123,17 +144,20 @@ export default {
       extraParam: {},
       searchItems: [
         {
-          name: "文章名称",
-          key: "title",
-          type: "string"
+          name: "时间段",
+          key: "periodId",
+          type: "select",
+          displayValue: [],
+          value: []
         },
         {
-          name: "更新时间",
-          key: "updateAt",
-          type: "datetimerange"
+          name: "预约日期",
+          key: "playDay",
+          type: "date"
         }
       ],
-      grounds:[]
+      periodIdList: [],
+      grounds: []
     };
   },
   // created() {
@@ -143,11 +167,9 @@ export default {
     route() {
       return this.$route;
     },
-    isRed(item){
+    isRed(item) {
       return true;
     }
-
-
   },
   components: {
     Search,
@@ -243,37 +265,48 @@ export default {
         }
       }
       //有时间段搜索进行转化字段
-      if (this.extraParam.updateAt) {
-        this.extraParam.startUpdateAt = this.extraParam.updateAt[0];
-        this.extraParam.endUpdateAt = this.extraParam.updateAt[1];
-        delete this.extraParam.updateAt;
+      if (this.extraParam.playDay) {
+        this.extraParam.playDay = this.extraParam.playDay[0];
+        //      console.log(this.extraParam.period)
+        //      console.log(this.extraParam.playDay)
       } else {
-        delete this.extraParam.startUpdateAt;
-        delete this.extraParam.endUpdateAt;
+        delete this.extraParam.playDay;
       }
       this.search(1);
     },
+
     search(page) {
       let _t = this;
       _t.page = page;
       _t.extraParam.label = "help";
       let param = {
-        pageable: {
-          page: page,
-          size: _t.pageSize,
-          sort: _t.sort
-        },
-        [this.model]: _t.extraParam
+        // pageable: {
+        //   page: page,
+        //   size: _t.pageSize,
+        //   sort: _t.sort
+        // },
+        // [this.model]: _t.extraParam
       };
 
       search(param, res => {
         let data = res;
-        _t.data = data;   //赋值给data  改为_t.list = data
-   //     _t.getTotal();
+        _t.grounds = data.data; //赋值给data  改为_t.list = data
+        //     _t.getTotal();
+        _t.setGroundsType();
       });
     },
 
-
+    setGroundsType() {
+      let grounds = this.grounds;
+      console.log(grounds);
+      for (let key in grounds) {
+        if (grounds[key].type === "standard") {
+          grounds[key].type = "标准场";
+        } else if (grounds[key].type === "small") {
+          grounds[key].type = "小场";
+        }
+      }
+    },
 
     getTotal() {
       let _t = this;
@@ -401,10 +434,23 @@ export default {
     },
     toCreate() {
       this.createProps.visible = true;
+    },
+
+    periodIdSearch() {
+      let param = {};
+
+      periodIdSearch(param, res => {
+        res.forEach(element => {
+          console.log(element);
+          this.searchItems[1].displayValue.push(element);
+        });
+      });
     }
   },
+
   mounted() {
     this.search(1);
+    this.periodIdSearch();
   }
 };
 </script>
@@ -431,10 +477,10 @@ export default {
 }
 
 .mybox {
-    width: 80%;
+  width: 80%;
   display: flex;
   flex-wrap: wrap;
-   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
 
 .item {
@@ -444,27 +490,32 @@ export default {
 
 .header {
   width: 80%;
-  border: 1px solid #DCDFE6;
+  border: 1px solid #dcdfe6;
   text-align: center;
-  vertical-align:middle;
-  height: 35px;
+  line-height: 200%;
+  height: 60px;
+  font-size: 25px;
 }
 
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
 
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
+.bg-purple {
+  background: #d3dce6;
+}
 
-    .bg-purple {
-    background: #d3dce6;
-  }
-
-  .mygroud {
-    border: 1px solid #DCDFE6;
-    height: 50px;
-  }
-  .red {
-    background-color: red;
-  }
+.mygroud {
+  line-height:150%;
+  border: 1px solid #dcdfe6;
+  height: 100px;
+}
+.red {
+  background-color: red;
+}
+.userNameClass {
+  font-size: 5px;
+  text-align: right;
+}
 </style>

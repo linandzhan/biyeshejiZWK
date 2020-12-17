@@ -1,7 +1,7 @@
 import axios from '@/framework/http/axios'
-const model = 'page';
+const model = 'area';
 let getUrl = `api/${model}/get`;
-let searchUrl = `api/${model}/search`;
+let searchUrl = `api/${model}/searchAreaIsSpare`;
 let countUrl = `api/${model}/count`;
 let deleteUrl = `api/${model}/delete`;
 let batchDeleteUrl = `api/${model}/delete`;
@@ -19,7 +19,7 @@ export function get(param, callback) {
 }
 
 export function search(param, callback) {
-  axios.post(`api/${model}/search`, param).then(data => {
+  axios.post(searchUrl, param).then(data => {
     if (data !== undefined && data !== '' && data !== null) {
       // callback when data is exist
       callback(data)
@@ -57,6 +57,16 @@ export function save(param, callback) {
 
 export function update(param, callback) {
   axios.post(`api/${model}/update`, param).then(data => {
+    if (data !== undefined && data !== '' && data !== null) {
+      // callback when data is exist
+      callback(data)
+    }
+  })
+}
+
+
+export function periodIdSearch(param,callback) {
+  axios.post(`api/period/periodIdSearch`, param).then(data => {
     if (data !== undefined && data !== '' && data !== null) {
       // callback when data is exist
       callback(data)
