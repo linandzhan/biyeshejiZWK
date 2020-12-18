@@ -17,12 +17,12 @@
     ]
   },
   {
-    "displayName": "用户管理",
+    "displayName": "会员管理",
     "icon": "el-icon-s-custom",
     "mid": 1,
     "children": [
       {
-        "displayName": "客户列表",
+        "displayName": "会员列表",
         "link": "/user/list",
         "mid": 0
       }
@@ -34,7 +34,7 @@
     "mid": 1,
     "children": [
       {
-        "displayName": "场内情况",
+        "displayName": "场地管理",
         "link": "/page/system/list",
         "mid": 0
       },

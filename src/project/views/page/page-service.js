@@ -8,6 +8,7 @@ let batchDeleteUrl = `api/${model}/delete`;
 let enableUrl = `api/${model}/enable`;
 let disableUrl = `api/${model}/disable`;
 let saveUrl = `api/${model}/save`
+let searchAreaUrl = `api/${model}/searchAreaIsSpare`
 
 export function get(param, callback) {
   axios.post(`api/${model}/get`, param).then(data => {
@@ -20,6 +21,15 @@ export function get(param, callback) {
 
 export function search(param, callback) {
   axios.post(searchUrl, param).then(data => {
+    if (data !== undefined && data !== '' && data !== null) {
+      // callback when data is exist
+      callback(data)
+    }
+  })
+}
+
+export function areaSearch(param, callback) {
+  axios.post(searchAreaUrl, param).then(data => {
     if (data !== undefined && data !== '' && data !== null) {
       // callback when data is exist
       callback(data)
@@ -46,7 +56,16 @@ export function  del(param, callback) {
 }
 
 export function save(param, callback) {
-  axios.post( `api/${model}/save`, param).then(data => {
+  axios.post( `api/orders/save`, param).then(data => {
+    if (data !== undefined && data !== '' && data !== null) {
+      // callback when data is exist
+      callback(data)
+    }
+  })
+}searchUserType
+
+export function searchUserType(param, callback) {
+  axios.post( `api/user/searchUserType`, param).then(data => {
     if (data !== undefined && data !== '' && data !== null) {
       // callback when data is exist
       callback(data)
@@ -66,7 +85,7 @@ export function update(param, callback) {
 
 
 export function periodIdSearch(param,callback) {
-  axios.post(`api/period/periodIdSearch`, param).then(data => {
+  axios.post(`api/period/search`, param).then(data => {
     if (data !== undefined && data !== '' && data !== null) {
       // callback when data is exist
       callback(data)

@@ -33,7 +33,7 @@
         format="yyyy-MM-dd"
         type="date"
         :placeholder="item.name"
-        style="width:350px"
+        style="width:300px"
       ></el-date-picker>
     </div>
     <div class="content" v-if="item.type === 'daterange'" >
@@ -93,7 +93,7 @@
     },
     methods: {
       onChange(e) {
-        console.log(e);
+      //  console.log(e);
         let obj = {};
         obj.key = this.item.key;
         let type = this.item.type;

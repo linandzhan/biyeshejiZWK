@@ -12,9 +12,9 @@
     <!--    按钮和分页-->
     <el-col :span="24">
       <div style="width: 95%;margin: 10px auto;">
-        <!-- <el-button icon="el-icon-plus" type="primary"
-                   @click="toCreate">新建
-        </el-button> -->
+        <el-button icon="el-icon-picture-outline-round" type="primary"
+                   @click="toCreate">包场预约
+        </el-button>
         <!-- <el-dropdown :trigger="'click'" @command="handleClick" size="medium" @visible-change="onMenuChange"> -->
 
         <!-- <el-button icon="el-icon-menu" style="background:#3e5265;color: white ">更多操作<i
@@ -47,7 +47,7 @@
     </el-col>
 
     <el-col :span="24" :data="data">
-      <div>
+      <div class="checkBox">
         <el-row>
           <el-col class="header">
             预约查询
@@ -76,8 +76,11 @@
               <br />
               {{ item.type }}
              <br>
-              <span v-if="item.isSpare == false" class="userNameClass">
+              <span v-if="item.isSpare == false && item.userName != null" class="userNameClass">
                 预约人：{{ item.userName }}
+              </span>
+              <span v-if="item.isSpare == false && item.userName == null" class="userNameClass">
+                预约人电话:{{item.phone}}
               </span>
             </div>
             <!-- <div class="grid-content bg-purple" v-for="item in list">{{item}}</div> -->
@@ -124,7 +127,7 @@ export default {
     return {
       categoryListName: [],
       categoryListId: [],
-      model: "page",
+      model: "searchAreaInfo",
       createProps: {
         visible: false
       },
@@ -142,6 +145,7 @@ export default {
       page: 1,
       total: 0,
       extraParam: {},
+      periodList: [],
       searchItems: [
         {
           name: "时间段",
@@ -247,6 +251,7 @@ export default {
     },
     searchBySearchItem(searchItems) {
       let keys = [];
+    //   console.log(searchItems)
       for (
         let i = 0,
           searchItemList = this.searchItems,
@@ -264,14 +269,21 @@ export default {
           delete this.extraParam[keys[i]];
         }
       }
+     // console.log(this.extraParam)
       //有时间段搜索进行转化字段
-      if (this.extraParam.playDay) {
-        this.extraParam.playDay = this.extraParam.playDay[0];
-        //      console.log(this.extraParam.period)
-        //      console.log(this.extraParam.playDay)
+      if (this.extraParam.periodId) {
+        let periodList = this.periodList;
+              for(let i in periodList) {
+                if(periodList[i].periodTime === this.extraParam.periodId){
+                  this.extraParam.periodId = periodList[i].id;
+                }
+              }
+              // console.log(this.extraParam.periodId)
+               console.log(this.extraParam.playDay)
       } else {
         delete this.extraParam.playDay;
       }
+
       this.search(1);
     },
 
@@ -280,12 +292,7 @@ export default {
       _t.page = page;
       _t.extraParam.label = "help";
       let param = {
-        // pageable: {
-        //   page: page,
-        //   size: _t.pageSize,
-        //   sort: _t.sort
-        // },
-        // [this.model]: _t.extraParam
+        [this.model]: _t.extraParam
       };
 
       search(param, res => {
@@ -298,7 +305,7 @@ export default {
 
     setGroundsType() {
       let grounds = this.grounds;
-      console.log(grounds);
+ //     console.log(grounds);
       for (let key in grounds) {
         if (grounds[key].type === "standard") {
           grounds[key].type = "标准场";
@@ -421,7 +428,7 @@ export default {
       this.search(this.page);
     },
     onMenuChange(val) {
-      console.log(val);
+    //  console.log(val);
     },
     handleClick(command) {
       switch (command) {
@@ -440,9 +447,16 @@ export default {
       let param = {};
 
       periodIdSearch(param, res => {
-        res.forEach(element => {
-          console.log(element);
-          this.searchItems[1].displayValue.push(element);
+        res.data.forEach(element => {
+        //  console.log(element);
+          this.searchItems[0].displayValue.push(element.periodTime);
+          this.searchItems[0].value.push(element.periodTime);
+          this.periodList.push({
+            id:element.periodId,
+            periodTime:element.periodTime
+          })
+
+
         });
       });
     }
@@ -512,10 +526,14 @@ export default {
   height: 100px;
 }
 .red {
-  background-color: red;
+  background-color: rgba(28, 118, 236, 0.12);
 }
 .userNameClass {
   font-size: 5px;
   text-align: right;
+}
+.checkBox {
+  border-radius: 4px;
+  margin: 50px 0px 0px 35px;
 }
 </style>
