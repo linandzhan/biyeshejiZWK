@@ -31,6 +31,7 @@
         v-model="value"
         @change="onChange"
         format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
         type="date"
         :placeholder="item.name"
         style="width:300px"

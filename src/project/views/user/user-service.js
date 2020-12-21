@@ -11,7 +11,7 @@ let saveUrl = `api/${model}/save`;
 let culculateDiscountUrl = `api/${model}/culculateDiscount`;
 let reduceBalanceUrl = `api/${model}/reduceBalance`
 let rechargeBalanceUrl = `api/${model}/rechargeBalance`
-
+let culculateLevelUrl = `api/${model}/culculateLevel`
 
 export function culculateDiscount(param, callback) {
   axios.post(culculateDiscountUrl, param).then(data => {
@@ -54,6 +54,15 @@ export function get(param, callback) {
 
 export function save(param, callback) {
   axios.post(saveUrl, param).then(data => {
+    if (data !== undefined && data !== '' && data !== null) {
+      // callback when data is exist
+      callback(data)
+    }
+  })
+}
+
+export function culculateLevel(param, callback) {
+  axios.post(culculateLevelUrl, param).then(data => {
     if (data !== undefined && data !== '' && data !== null) {
       // callback when data is exist
       callback(data)

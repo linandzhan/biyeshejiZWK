@@ -125,18 +125,18 @@
 
         <el-table-column prop="level" label="会员等级"> </el-table-column>
 
-        <el-table-column prop="status" label="状态"> </el-table-column>
+        <!-- <el-table-column prop="status" label="状态"> </el-table-column> -->
 
         <el-table-column fixed="right" align="center" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button
+            <!-- <el-button
               @click.stop="handleStatusChange(scope.row)"
               type="text"
               size="small"
               >{{
                 scope.row.status.indexOf("启用") >= 0 ? "禁用" : "启用"
               }}</el-button
-            >
+            > -->
             <el-button @click="toReduce(scope.row)" type="text" size="small">{{
               "扣费"
             }}</el-button>
@@ -403,6 +403,8 @@ export default {
           data[i].level = "中级";
         } else if (_level == "high") {
           data[i].level = "高级";
+        }else {
+          data[i].level = "非会员";
         }
       }
     },

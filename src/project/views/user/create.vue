@@ -6,25 +6,47 @@
     width="40%"
     :before-close="handleClose"
   >
-    <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="150px">
+    <el-form
+      ref="formValidate"
+      :model="formValidate"
+      :rules="ruleValidate"
+      label-width="150px"
+    >
       <el-form-item label="姓名" prop="userName">
-        <el-input v-model="formValidate.userName" placeholder="输入姓名"></el-input>
+        <el-input
+          v-model="formValidate.userName"
+          placeholder="输入姓名"
+        ></el-input>
       </el-form-item>
 
       <el-form-item label="手机号码" prop="phone">
-        <el-input v-model="formValidate.phone" placeholder="输入手机号"></el-input>
+        <el-input
+          v-model="formValidate.phone"
+          placeholder="输入手机号"
+        ></el-input>
       </el-form-item>
 
       <el-form-item label="首次充值" prop="balance">
-        <el-input v-model="formValidate.balance" placeholder="输入充值金额"></el-input>
+        <el-input
+          @blur.native.capture="culculateLevel"
+          v-model="formValidate.balance"
+          placeholder="输入充值金额"
+        ></el-input>
       </el-form-item>
 
-      <el-form-item label="会员级别">
+      <!-- <el-form-item label="会员级别">
         <el-select v-model="formValidate.level" placeholder="请选择">
           <el-option key="l" label="初级" value="low"></el-option>
           <el-option key="m" label="中级" value="middle"></el-option>
           <el-option key="h" label="高级" value="high"></el-option>
         </el-select>
+      </el-form-item> -->
+      <el-form-item label="会员类型" prop="level">
+        <el-input
+          v-model="formValidate.level"
+          placeholder="类型"
+          :disabled="true"
+        ></el-input>
       </el-form-item>
 
       <el-form-item label="创建时间" prop="creatTime">
@@ -40,13 +62,15 @@
     </el-form>
 
     <el-button @click="handleClose">取 消</el-button>
-    <el-button type="primary" @click="handleConfirm('formValidate')">确 定</el-button>
+    <el-button type="primary" @click="handleConfirm('formValidate')"
+      >确 定</el-button
+    >
   </el-dialog>
 </template>
 
 <script>
 import emitter from "@/framework/mixins/emitter";
-import { save } from "./user-service";
+import { save, culculateLevel } from "./user-service";
 
 export default {
   name: "create",
@@ -59,7 +83,7 @@ export default {
   },
   data() {
     const validateBalance = (rule, value, callback) => {
-      console.log("sss");
+      // console.log("sss");
       let numReg = /^[0-9]*$/;
       let numRe = new RegExp(numReg);
       if (!numRe.test(value)) {
@@ -123,16 +147,53 @@ export default {
         this.$refs[name].validate(valid => {
           if (valid) {
             console.log(this.formValidate);
+     //       this.setLevel();
             save({ [this.model]: this.formValidate }, res => {
               if (res.code == 200) {
                 this.$message.success("添加成功");
                 this.$emit("on-save-success");
+                this.$refs['formValidate'].resetFields();
               } else {
                 this.$message.success("添加失败");
               }
             });
           }
         });
+      });
+    },
+
+    // setLevel() {
+
+    //   let _t = this;
+
+    //   if (_t.formValidate.level === "非会员") {
+    //     _t.formValidate.level = "no-level";
+    //   } else if (_t.formValidate.level == "初级") {
+    //     _t.formValidate.level = "low";
+    //   } else if (_t.formValidate.level== "中级") {
+    //     _t.formValidate.level = "middle";
+    //   } else if (_t.formValidate.level == "高级") {
+    //     _t.formValidate.level = "high";
+    //   }
+    // },
+
+    culculateLevel() {
+      //    console.log("sads");
+      let _t = this;
+      let balance = _t.formValidate.balance;
+      let param = {
+        userBalance: balance
+      };
+      culculateLevel(param, res => {
+        if (res.data.level === "no-level") {
+          _t.formValidate.level = "非会员";
+        } else if (res.data.level == "low") {
+          _t.formValidate.level = "初级";
+        } else if (res.data.level == "middle") {
+          _t.formValidate.level = "中级";
+        } else if (res.data.level == "high") {
+          _t.formValidate.level = "高级";
+        }
       });
     }
 

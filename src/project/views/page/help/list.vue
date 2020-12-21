@@ -251,7 +251,7 @@ export default {
     },
     searchBySearchItem(searchItems) {
       let keys = [];
-    //   console.log(searchItems)
+     // console.log(searchItems)
       for (
         let i = 0,
           searchItemList = this.searchItems,
@@ -269,8 +269,10 @@ export default {
           delete this.extraParam[keys[i]];
         }
       }
-     // console.log(this.extraParam)
-      //有时间段搜索进行转化字段
+
+
+
+            //有时间段搜索进行转化字段
       if (this.extraParam.periodId) {
         let periodList = this.periodList;
               for(let i in periodList) {
@@ -279,9 +281,9 @@ export default {
                 }
               }
               // console.log(this.extraParam.periodId)
-               console.log(this.extraParam.playDay)
+         //      console.log(this.extraParam.playDay)
       } else {
-        delete this.extraParam.playDay;
+        delete this.extraParam.periodId;
       }
 
       this.search(1);
