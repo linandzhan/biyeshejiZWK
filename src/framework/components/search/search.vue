@@ -66,6 +66,7 @@
 <style lang="less" scoped>
   .search {
     padding-top: 10px;
+
     .search-block {
       /*padding: 10px 20px;*/
       // background-color: #ffffff;

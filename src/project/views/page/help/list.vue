@@ -49,7 +49,7 @@
     <el-col :span="24" :data="data">
       <div class="checkBox">
         <el-row>
-          <el-col class="header">
+          <el-col class="header" style="border-radius: 4px;"> 
             预约查询
           </el-col>
         </el-row>
@@ -496,7 +496,8 @@ export default {
   width: 80%;
   display: flex;
   flex-wrap: wrap;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 }
 
 .item {
@@ -535,7 +536,6 @@ export default {
   text-align: right;
 }
 .checkBox {
-  border-radius: 4px;
   margin: 50px 0px 0px 35px;
 }
 </style>

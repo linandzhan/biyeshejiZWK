@@ -165,7 +165,7 @@ export default {
         this.$refs[name].validate(valid => {
           if (valid) {
             save({ [this.model]: this.formValidate }, res => {
-              this.$message.success("添加成功");
+              this.$message.success("成功扣费"+res.data);
               this.$emit("on-save-success");
               this.$refs['formValidate'].resetFields();
             });

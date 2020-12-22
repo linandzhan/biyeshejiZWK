@@ -46,7 +46,7 @@
         :placeholder="item.name"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
-        style="width: 350px"
+        style="width: 350px;"
       ></el-date-picker>
     </div>
     <div class="content" v-if="item.type === 'datetimerange'">
