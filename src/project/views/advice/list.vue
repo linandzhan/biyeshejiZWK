@@ -81,7 +81,7 @@
     <el-col :span="24">
       <el-table
         :data="data"
-        style="width: 100%;margin:0px auto auto 100px;"
+        style="width: 80%;margin:0px auto auto 100px;"
         @selection-change="handleSelectionChange"
         @row-dblclick="handleRowClick"
       >

@@ -28,6 +28,15 @@ export function search(param, callback) {
   })
 }
 
+export function searchArea(param, callback) {
+  axios.post(`api/${model}/searchArea`, param).then(data => {
+    if (data !== undefined && data !== '' && data !== null) {
+      // callback when data is exist
+      callback(data)
+    }
+  })
+}
+
 export function areaSearch(param, callback) {
   axios.post(searchAreaUrl, param).then(data => {
     if (data !== undefined && data !== '' && data !== null) {

@@ -11,38 +11,13 @@
     <!--    按钮和分页-->
     <el-col :span="24">
       <div style="width: 95%; margin: 10px auto">
-        <el-dropdown
-          :trigger="'click'"
-          @command="handleClick"
-          size="medium"
-          @visible-change="onMenuChange"
+        <el-button icon="el-icon-plus" type="primary" @click="toCreate"
+          >新建场地</el-button
         >
-          <el-button
-            icon="el-icon-menu"
-            style="background: #3e5265; color: white"
-            >更多操作<i
-              :class="
-                menu.visible ? 'el-icon-caret-top' : 'el-icon-caret-bottom'
-              "
-            ></i
-          ></el-button>
+        <el-button icon="el-icon-delete" @click="batchDelete"
+          >删除场地</el-button
+        >
 
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              icon="el-icon-edit"
-              command="编辑"
-              :disabled="selectList.length !== 1"
-              :style="
-                selectList.length !== 1
-                  ? { color: 'rgba(255,255,255,0.4)' }
-                  : { color: '#fff' }
-              "
-              @click="handleEdit"
-            >
-              编辑
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
         <div class="pager-group">
           <el-pagination
             @size-change="handleSizeChange"
@@ -66,62 +41,37 @@
         @row-dblclick="handleRowClick"
         @sort-change="handleSortChange"
       > -->
-      <el-col :span="24" :offset="6">
-        <el-tag type="success" style="margin-left:80px">标签二</el-tag>
-        <el-tag type="info" style="margin-left:80px">标签三</el-tag>
-        <el-tag type="warning" style="margin-left:80px">标签四</el-tag>
-        <el-tag type="danger" style="margin-left:80px">标签五</el-tag>
-      </el-col> 
-       <!-- <el-table-column
-          type="selection"
-          width="55"> -->
-        <!-- </el-table-column>
-        <el-table-column
-          label="文章名称"
-        >
-          <template slot-scope="scope">
-            <el-button
-              @click.native.prevent="toDetail(scope.row)"
-              type="text"
-              size="small">
-              {{scope.row.title}}
-            </el-button>
-          </template>
+    <el-col :span="24">
+      <el-table
+        :data="data"
+        style="width: 100%; margin: 0 auto"
+        @selection-change="handleSelectionChange"
+        @row-dblclick="handleRowClick"
+      >
+        <el-table-column type="selection" width="55"> </el-table-column>
+        <el-table-column prop="number" label="场地号"></el-table-column>
+
+        <el-table-column prop="rentalPrice" label="租场价格"> </el-table-column>
+        <el-table-column prop="type" label="场地类型" sortable>
         </el-table-column>
-        <el-table-column
-          prop="position"
-          label="排列数字"
-        >
-        </el-table-column>
-        <el-table-column
-          sortable="custom"
-          prop="updateAt"
-          label="更新时间"
-        > -->
-        <!-- </el-table-column> -->
-      <!-- </el-table>
-    </el-col> -->
-    <!--    新建-->
+        <!-- <el-table-column prop="status" label="场地状态"> </el-table-column> -->
+      </el-table>
+    </el-col>
+
     <i-create
       :dialog-visible="createProps.visible"
       @on-dialog-close="handleClose"
       @on-save-success="handleSave"
-      :id="editId"
     />
-    <!--    &lt;!&ndash;    编辑&ndash;&gt;-->
-    <!--    <i-edit-->
-    <!--      :dialog-visible="editProps.visible"-->
-    <!--      :edit-id="editId"-->
-    <!--      @on-dialog-close="handleClose"-->
-    <!--    />-->
+    <!--       :id="editId" -->
   </el-row>
 </template>
 <script>
 import Search from "@/framework/components/search";
-import ICreate from "./edit";
+import ICreate from "./create";
 import { post } from "@/framework/http/request";
 import Emitter from "@/framework/mixins/emitter";
-import { search, count, del } from "../page-service"; //接口
+import { search, count, del, searchArea } from "../page-service"; //接口
 
 export default {
   name: "commodityAudit",
@@ -152,15 +102,15 @@ export default {
       extraParam: {},
       searchItems: [
         {
-          name: "文章名称",
-          key: "title",
+          name: "球馆查询",
+          key: "number",
           type: "string",
         },
-        {
-          name: "更新时间",
-          key: "updateAt",
-          type: "datetimerange",
-        },
+        // {
+        //   name: "更新时间",
+        //   key: "updateAt",
+        //   type: "datetimerange",
+        // },
       ],
     };
   },
@@ -180,6 +130,10 @@ export default {
     handleEdit() {
       this.editId = this.selectList[0].id;
       this.editProps.visible = true;
+    },
+    toCreate() {
+      //       console.log("sadasd")
+      this.createProps.visible = true;
     },
     handleStatusChange(row) {
       let status;
@@ -258,47 +212,80 @@ export default {
           delete this.extraParam[keys[i]];
         }
       }
-      //有时间段搜索进行转化字段
-      if (this.extraParam.updateAt) {
-        this.extraParam.startUpdateAt = this.extraParam.updateAt[0];
-        this.extraParam.endUpdateAt = this.extraParam.updateAt[1];
-        delete this.extraParam.updateAt;
-      } else {
-        delete this.extraParam.startUpdateAt;
-        delete this.extraParam.endUpdateAt;
-      }
+      // //有时间段搜索进行转化字段
+      // if (this.extraParam.updateAt) {
+      //   this.extraParam.startUpdateAt = this.extraParam.updateAt[0];
+      //   this.extraParam.endUpdateAt = this.extraParam.updateAt[1];
+      //   delete this.extraParam.updateAt;
+      // } else {
+      //   delete this.extraParam.startUpdateAt;
+      //   delete this.extraParam.endUpdateAt;
+      // }
       this.search(1);
     },
     search(page) {
       let _t = this;
       _t.page = page;
-      _t.extraParam.label = "system";
+      console.log(_t.extraParam.number);
       let param = {
-        pageable: {
+        searchInfo: {
           page: page,
           size: _t.pageSize,
           sort: _t.sort,
+          number: _t.extraParam.number,
         },
-        [this.model]: _t.extraParam,
       };
 
-      search(param, (res) => {
+      searchArea(param, (res) => {
         let data = res;
-        _t.data = data;
-        _t.getTotal();
+        _t.data = data.data.items;
+        //        _t.getTotal();
+        _t.total = data.data.total;
+        _t.setProp();
       });
     },
-    getTotal() {
-      let _t = this;
-      let param = {
-        page: {},
-      };
-      for (let key in _t.extraParam) {
-        param.page[key] = _t.extraParam[key];
+
+    setProp() {
+      console.log("sdada");
+      let data = this.data;
+
+      for (let i in data) {
+        // console.log(data[i].type)
+        if (data[i].type === "small") {
+          data[i].type = "小场";
+        } else if (data[i].type == "standard") {
+          data[i].type = "标准场";
+        }
       }
-      count(param, (res) => {
-        _t.total = parseInt(res);
-      });
+
+      if (type === "small") {
+        console.log("sssaas");
+        _t.data.type = "小场";
+      } else if (type == "standard") {
+        _t.data.type = "标准场";
+      }
+    },
+
+    getTotal() {
+      // let _t = this;
+      // let param = {
+      //   page: {},
+      // };
+      // for (let key in _t.extraParam) {
+      //   param.page[key] = _t.extraParam[key];
+      // }
+      // count(param, (res) => {
+      //   _t.total = parseInt(res);
+      // });
+
+      let _t = this;
+      let type = this.data.type;
+      if (type === "small") {
+        console.log("sssaas");
+        _t.data.type = "小场";
+      } else if (type == "standard") {
+        _t.data.type = "标准场";
+      }
     },
     handleTransportSelectList(list) {
       this.selectList = list;
@@ -382,11 +369,11 @@ export default {
     handleSelectionChange(val) {
       this.selectList = val;
     },
-    handleRowClick(row) {
-      // print(this.id);
-      this.editId = row.id;
-      this.createProps.visible = true;
-    },
+    // handleRowClick(row) {
+    //   // print(this.id);
+    //   this.editId = row.id;
+    //   this.createProps.visible = true;
+    // },
     toDetail(row) {
       this.$router.push({ path: `show/` + row.id });
     },

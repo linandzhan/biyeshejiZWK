@@ -1,10 +1,10 @@
 <template>
-  <el-dialog
+  <!-- <el-dialog
     title="基本信息"
     :visible.sync="dialogVisible"
     :modal-append-to-body='false'
     width="60%"
-    :before-close="handleClose">
+    :before-close="handleClose"> -->
     <!--    <div style="overflow: auto;height:40vh;padding: 10px 0 40px;">-->
     <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="150px">
       <el-form-item label="文章位置" prop="position" >
@@ -18,11 +18,11 @@
       </el-form-item>
     </el-form>
     <!--    </div>-->
-    <div slot="footer" class="dialog-footer">
+    <!-- <div slot="footer" class="dialog-footer">
       <el-button @click="handleClose">取 消</el-button>
       <el-button type="primary" @click="handleConfirm">确 定</el-button>
-    </div>
-  </el-dialog>
+    </div> -->
+  <!-- </el-dialog> -->
 </template>
 
 <script>
