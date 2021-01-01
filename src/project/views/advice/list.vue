@@ -62,7 +62,7 @@
 
     <!--    按钮和分页-->
     <el-col :span="24">
-      <div style="width: 99%;margin: 125px 0 0 10px;">
+      <div style="width: 99%;margin: 80px 0 0 10px;">
         <div class="pager-group">
           <el-pagination
             @size-change="handleSizeChange"
@@ -459,6 +459,6 @@ export default {
   height: 130px;
   border: 1px solid #bbc7d8;
   border-radius: 10px;
-  margin: 120px 0 0 250px;
+  margin: 60px 0 0 250px;
 }
 </style>
