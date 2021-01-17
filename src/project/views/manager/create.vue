@@ -125,6 +125,7 @@
     computed: {},
     methods: {
       handleClose() {
+        this.$refs['formValidate'].resetFields();
         this.$emit('on-dialog-close');
       },
       handleConfirm(name) {
@@ -138,6 +139,7 @@
                 res => {
                 if(res.code == 200){
                   this.$message.success('添加成功');
+                  this.$refs['formValidate'].resetFields();
                   this.$emit('on-save-success');
                 }else{
                   this.$message.success('添加失败');

@@ -8,11 +8,6 @@
         "displayName": "员工管理",
         "link": "/manager/list",
         "mid": 0
-      },
-      {
-        "displayName": "密码修改",
-        "link": "/manager/list",
-        "mid": 0
       }
     ]
   },
@@ -53,11 +48,6 @@
       {
         "displayName": "订单列表",
         "link": "/advice/list",
-        "mid": 0
-      },
-      {
-        "displayName": "统计查询",
-        "link": "/advice/statistics",
         "mid": 0
       }
     ]

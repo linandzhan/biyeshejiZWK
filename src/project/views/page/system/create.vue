@@ -10,22 +10,21 @@
       <el-form
         ref="formValidate"
         :model="formValidate"
-        :rules="ruleValidate"
         label-width="80px"
       >
-      <el-form-item label="场地号" prop="userName">
-        <el-input
-          v-model="formValidate.userName"
-          placeholder="场地号"
-        ></el-input>
-      </el-form-item>
+        <el-form-item label="场地号" prop="number">
+          <el-input
+            v-model="formValidate.number"
+            placeholder="场地号"
+          ></el-input>
+        </el-form-item>
 
-      <el-form-item label="场地类型" prop="userName">
-        <el-select v-model="formValidate.type" placeholder="请选择">
-          <el-option key="s" label="小场" value="small"></el-option>
-          <el-option key="l" label="标准场" value="standard"></el-option>
-        </el-select>
-      </el-form-item> 
+        <el-form-item label="场地类型" prop="type">
+          <el-select v-model="formValidate.type" placeholder="请选择">
+            <el-option key="s" label="小场" value="small"></el-option>
+            <el-option key="l" label="标准场" value="standard"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
     </div>
 
@@ -39,6 +38,7 @@
 
 <script>
 import Emitter from "@/framework/mixins/emitter";
+import {saveArea} from "../page-service";
 
 export default {
   mixins: [Emitter],
@@ -52,7 +52,10 @@ export default {
   data() {
     return {
       model: "areaInfo",
-      formValidate: {},
+      formValidate: {
+          number:'',
+          type: ''
+      },
     };
   },
 
@@ -60,7 +63,23 @@ export default {
 
   methods: {
     handleClose() {
+      this.$refs['formValidate'].resetFields();
       this.$emit("on-dialog-close");
+    },
+    handleConfirm(name) {
+      console.log("sdasdwww");
+      saveArea(
+        {[this.model]:this.formValidate},
+        res => {
+        if(res.code == 200){
+          this.$message.success('添加成功');
+          this.$refs['formValidate'].resetFields();
+          this.$emit('on-save-success');
+        }else{
+          let msg = res.msg;
+          this.$message.success(msg);
+        }
+      })
     },
   },
 };

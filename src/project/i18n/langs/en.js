@@ -1,7 +1,7 @@
 import enLocale from 'element-ui/lib/locale/lang/en'
 const en = {
   message: {
-    'projectName':'vue-admin',
+    'projectName':'篮球馆管理系统',
     'username': 'username',
     'password': 'password',
     'signIn': 'signIn',
