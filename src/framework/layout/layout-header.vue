@@ -60,6 +60,8 @@
 </template>
 
 <script>
+  import {updatePassword} from '../../project/views/manager/manager-service'
+
 export default {
   name: "layout-header",
   data(){
@@ -153,8 +155,13 @@ export default {
     },
     handleConfirm(formName){
       this.$refs[formName].validate((valid) => {
+       let user =  localStorage.getItem('userCache');
         if (valid) {
-          alert('submit!');
+          // alert('submit!');
+                      updatePassword({id: JSON.parse(user).id, password: this.ruleForm.pass}, res => {
+              this.$message.success('修改成功');
+              this.sercetVisible = false;
+            })
         } else {
           console.log('error submit!!');
           return false;
