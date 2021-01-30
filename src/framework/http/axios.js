@@ -83,6 +83,7 @@ instance.interceptors.response.use(
   //  console.log(res.data)
     if (code) {
       if (res.code === 200) {
+
         let data = res.data;
         // if (data === undefined || data === '' || data === null) {
         //   data = 0
