@@ -14,14 +14,14 @@
         <el-button icon="el-icon-plus" type="primary" @click="toCreate"
           >新建</el-button
         >
-        <el-button icon="el-icon-delete" @click="batchDelete">删除</el-button>
+<!--        <el-button icon="el-icon-delete" @click="batchDelete">删除</el-button>  -->
         <el-dropdown
           :trigger="'click'"
           @command="handleClick"
           size="medium"
           @visible-change="onMenuChange"
         >
-          <el-button
+ <!--         <el-button
             icon="el-icon-menu"
             style="background: #3e5265; color: white"
             >更多操作<i
@@ -29,7 +29,7 @@
                 menu.visible ? 'el-icon-caret-top' : 'el-icon-caret-bottom'
               "
             ></i
-          ></el-button>
+          ></el-button>    -->
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               icon="el-icon-circle-check"

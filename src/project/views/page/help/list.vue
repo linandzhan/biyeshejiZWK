@@ -49,7 +49,7 @@
     <el-col :span="24" :data="data">
       <div class="checkBox">
         <el-row>
-          <el-col class="header" style="border-radius: 4px;"> 
+          <el-col class="header" style="border-radius: 4px;">
             预约查询
           </el-col>
         </el-row>
@@ -82,6 +82,9 @@
               <span v-if="item.isSpare == false && item.userName == null" class="userNameClass">
                 预约人电话:{{item.phone}}
               </span>
+               <el-button icon="el-icon-picture-outline-round" type="primary" v-if="item.isSpare == false"
+                     @click="toCreate">取消预约
+               </el-button>
             </div>
             <!-- <div class="grid-content bg-purple" v-for="item in list">{{item}}</div> -->
             <!-- 返回boolean类型，true的话就展示red样式，false的话就不展示red样式 -->
@@ -526,7 +529,7 @@ export default {
 .mygroud {
   line-height:150%;
   border: 1px solid #dcdfe6;
-  height: 100px;
+  height: 110px;
 }
 .red {
   background-color: rgba(28, 118, 236, 0.12);

@@ -166,14 +166,14 @@ export default {
           if (valid) {
             save({ [this.model]: this.formValidate }, res => {
               this.$message.success("成功扣费"+res.data);
-              this.$emit("on-save-success");
               this.$refs['formValidate'].resetFields();
+              this.$emit("on-save-success");
             });
           }
         });
       });
 
-      
+
     },
     handleTransportFileList(e) {
       console.log(e);

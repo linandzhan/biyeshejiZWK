@@ -72,9 +72,11 @@ export default {
         {[this.model]:this.formValidate},
         res => {
         if(res.code == 200){
-          this.$message.success('添加成功');
+                    let msg = res.msg;
+                    this.$message.success(msg);
           this.$refs['formValidate'].resetFields();
           this.$emit('on-save-success');
+           this.$emit("on-dialog-close");
         }else{
           let msg = res.msg;
           this.$message.success(msg);

@@ -73,6 +73,7 @@ export default {
 
       rechargeBalance(param, res => {
         this.$message.success("充值成功");
+        this.$refs['formValidate'].resetFields();
         this.$emit("on-save-success");
       });
     }

@@ -130,10 +130,10 @@ export default {
           value: "zh",
           label: "中文",
         },
-        {
-          value: "en",
-          label: "English",
-        },
+ //       {
+ //         value: "en",
+ //         label: "English",
+  //      },
       ],
       dialogVisible: false,
       rules: {

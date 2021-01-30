@@ -14,9 +14,9 @@
         <el-button icon="el-icon-plus" type="primary" @click="toCreate"
           >新建场地</el-button
         >
-        <el-button icon="el-icon-delete" @click="batchDelete"
+ <!--       <el-button icon="el-icon-delete" @click="batchDelete"
           >删除场地</el-button
-        >
+        > -->
 
         <div class="pager-group">
           <el-pagination
@@ -398,6 +398,11 @@ export default {
           break;
       }
     },
+
+    batchDelete() {
+      this.editId = row.id;
+      console.log(row.id);
+    }
   },
   mounted() {
     this.search(1);
