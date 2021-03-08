@@ -14,9 +14,9 @@
         <el-button icon="el-icon-plus" type="primary" @click="toCreate"
           >新建场地</el-button
         >
- <!--       <el-button icon="el-icon-delete" @click="batchDelete"
+        <el-button icon="el-icon-delete" @click="batchDelete"
           >删除场地</el-button
-        > -->
+        >
 
         <div class="pager-group">
           <el-pagination
@@ -290,6 +290,26 @@ export default {
     handleTransportSelectList(list) {
       this.selectList = list;
     },
+    batchDelete() {
+      let _t = this;
+      let selectList = this.selectList;
+      this.$confirm("确定删除所选的记录吗?", "删除提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        selectList.map((s) => {
+          // console.log(s)
+          del({ id: s.areaId }, (res) => {
+            _t.search(1);
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+          });
+        });
+      });
+    },
 
     //批量启用
     batchEnable() {
@@ -398,11 +418,6 @@ export default {
           break;
       }
     },
-
-    batchDelete() {
-      this.editId = row.id;
-      console.log(row.id);
-    }
   },
   mounted() {
     this.search(1);

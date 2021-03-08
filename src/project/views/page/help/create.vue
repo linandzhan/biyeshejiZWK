@@ -3,7 +3,7 @@
     title="包场信息"
     :visible.sync="dialogVisible"
     :modal-append-to-body="false"
-    width="30%"
+    width="60%"
     :before-close="handleClose"
   >
     <!--    <div style="overflow: auto;height:40vh;padding: 10px 0 40px;">-->
@@ -172,7 +172,6 @@ export default {
           }
         });
       });
-
 
     },
     handleTransportFileList(e) {

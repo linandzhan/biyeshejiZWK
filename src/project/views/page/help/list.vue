@@ -11,9 +11,12 @@
 
     <!--    按钮和分页-->
     <el-col :span="24">
-      <div style="width: 95%;margin: 10px auto;">
-        <el-button icon="el-icon-picture-outline-round" type="primary"
-                   @click="toCreate">包场预约
+      <div style="width: 95%; margin: 10px auto">
+        <el-button
+          icon="el-icon-picture-outline-round"
+          type="primary"
+          @click="toCreate"
+          >包场预约
         </el-button>
         <!-- <el-dropdown :trigger="'click'" @command="handleClick" size="medium" @visible-change="onMenuChange"> -->
 
@@ -63,28 +66,35 @@
           >
             <div
               :class="{ red: item.isSpare == false }"
-              style="width:100%;height: 100%;text-align:center;"
+              style="width: 100%; height: 100%; text-align: center"
             >
               {{ item.number }}
               <br />
-              <span v-if="item.isSpare == false">
-                被预定
-              </span>
-              <span v-if="item.isSpare == true">
-                可预定
-              </span>
+              <span v-if="item.isSpare == false"> 被预定 </span>
+              <span v-if="item.isSpare == true"> 可预定 </span>
               <br />
               {{ item.type }}
-             <br>
-              <span v-if="item.isSpare == false && item.userName != null" class="userNameClass">
+              <br />
+              <span
+                v-if="item.isSpare == false && item.userName != null"
+                class="userNameClass"
+              >
                 预约人：{{ item.userName }}
               </span>
-              <span v-if="item.isSpare == false && item.userName == null" class="userNameClass">
-                预约人电话:{{item.phone}}
+              <span
+                v-if="item.isSpare == false && item.userName == null"
+                class="userNameClass"
+              >
+                预约人电话:{{ item.phone }}
               </span>
-               <el-button icon="el-icon-picture-outline-round" type="primary" v-if="item.isSpare == false"
-                     @click="toCreate">取消预约
-               </el-button>
+              <span v-if="item.isSpare == false">
+                <el-button
+                  style="width: 40%; height: 28%"
+                  type="primary"
+                  @click="deleteOrder(item.number)"
+                  >取消预订
+                </el-button>
+              </span>
             </div>
             <!-- <div class="grid-content bg-purple" v-for="item in list">{{item}}</div> -->
             <!-- 返回boolean类型，true的话就展示red样式，false的话就不展示red样式 -->
@@ -132,13 +142,13 @@ export default {
       categoryListId: [],
       model: "searchAreaInfo",
       createProps: {
-        visible: false
+        visible: false,
       },
       editProps: {
-        visible: false
+        visible: false,
       },
       menu: {
-        visible: false
+        visible: false,
       },
       editId: 0, //编辑id
       data: [],
@@ -155,16 +165,16 @@ export default {
           key: "periodId",
           type: "select",
           displayValue: [],
-          value: []
+          value: [],
         },
         {
           name: "预约日期",
           key: "playDay",
-          type: "date"
-        }
+          type: "date",
+        },
       ],
       periodIdList: [],
-      grounds: []
+      grounds: [],
     };
   },
   // created() {
@@ -176,16 +186,16 @@ export default {
     },
     isRed(item) {
       return true;
-    }
+    },
   },
   components: {
     Search,
     ICreate,
-    IEdit
+    IEdit,
   },
   methods: {
     findById() {
-      findById({ storeId: this.id }, res => {
+      findById({ storeId: this.id }, (res) => {
         this.data = res;
       });
     },
@@ -204,22 +214,22 @@ export default {
       this.$confirm(`确定${status}选中内容？`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           if (status === "禁用") {
-            disable({ id: row.id }, res => {
+            disable({ id: row.id }, (res) => {
               _t.$message({
                 type: "success",
-                message: "已禁用!"
+                message: "已禁用!",
               });
               _t.search(_t.page);
             });
           } else {
-            enable({ id: row.id }, res => {
+            enable({ id: row.id }, (res) => {
               _t.$message({
                 type: "success",
-                message: "已启用!"
+                message: "已启用!",
               });
               _t.search(_t.page);
             });
@@ -228,7 +238,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -243,18 +253,18 @@ export default {
       let order = sort.order;
       if (order === "ascending") {
         this.sort = {
-          asc: [sort.prop]
+          asc: [sort.prop],
         };
       } else {
         this.sort = {
-          desc: [sort.prop]
+          desc: [sort.prop],
         };
       }
       this.search(1);
     },
     searchBySearchItem(searchItems) {
       let keys = [];
-     // console.log(searchItems)
+      // console.log(searchItems)
       for (
         let i = 0,
           searchItemList = this.searchItems,
@@ -273,18 +283,16 @@ export default {
         }
       }
 
-
-
-            //有时间段搜索进行转化字段
+      //有时间段搜索进行转化字段
       if (this.extraParam.periodId) {
         let periodList = this.periodList;
-              for(let i in periodList) {
-                if(periodList[i].periodTime === this.extraParam.periodId){
-                  this.extraParam.periodId = periodList[i].id;
-                }
-              }
-              // console.log(this.extraParam.periodId)
-         //      console.log(this.extraParam.playDay)
+        for (let i in periodList) {
+          if (periodList[i].periodTime === this.extraParam.periodId) {
+            this.extraParam.periodId = periodList[i].id;
+          }
+        }
+        // console.log(this.extraParam.periodId)
+        //      console.log(this.extraParam.playDay)
       } else {
         delete this.extraParam.periodId;
       }
@@ -297,10 +305,10 @@ export default {
       _t.page = page;
       _t.extraParam.label = "help";
       let param = {
-        [this.model]: _t.extraParam
+        [this.model]: _t.extraParam,
       };
 
-      search(param, res => {
+      search(param, (res) => {
         let data = res;
         _t.grounds = data.data; //赋值给data  改为_t.list = data
         //     _t.getTotal();
@@ -310,7 +318,7 @@ export default {
 
     setGroundsType() {
       let grounds = this.grounds;
- //     console.log(grounds);
+      //     console.log(grounds);
       for (let key in grounds) {
         if (grounds[key].type === "standard") {
           grounds[key].type = "标准场";
@@ -320,15 +328,33 @@ export default {
       }
     },
 
+    deleteOrder(number) {
+      // console.log(number);
+      let _t = this;
+      let extraParam = this.extraParam;
+      let params = {
+        number: number,
+        periodId: extraParam.periodId,
+        playDay: extraParam.playDay,
+      };
+      post("/api/orders/del", params, (res) => {
+        _t.search(1);
+        this.$message({
+          type: "success",
+          message: "取消预约成功!",
+        });
+      });
+    },
+
     getTotal() {
       let _t = this;
       let param = {
-        page: {}
+        page: {},
       };
       for (let key in _t.extraParam) {
         param.page[key] = _t.extraParam[key];
       }
-      count(param, res => {
+      count(param, (res) => {
         _t.total = parseInt(res);
       });
     },
@@ -343,11 +369,11 @@ export default {
       this.$confirm("确定启用所选的记录吗?", "启用提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
-          selectList.map(s => {
-            enable({ id: s.id }, res => {
+          selectList.map((s) => {
+            enable({ id: s.id }, (res) => {
               _t.search(_t.page);
               // this.$message({
               //   type: 'success',
@@ -359,7 +385,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消"
+            message: "已取消",
           });
         });
     },
@@ -370,11 +396,11 @@ export default {
       this.$confirm("确定禁用所选的记录吗?", "启用提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
-          selectList.map(s => {
-            disable({ id: s.id }, res => {
+          selectList.map((s) => {
+            disable({ id: s.id }, (res) => {
               _t.search(_t.page);
               // this.$message({
               //   type: 'success',
@@ -386,20 +412,20 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消"
+            message: "已取消",
           });
         });
     },
 
     delete(id) {
       let _t = this;
-      del({ id: id }, res => {
+      del({ id: id }, (res) => {
         _t.search(_t.page);
       });
     },
     enable(id, url) {
       let _t = this;
-      post(url, { id: id }, res => {
+      post(url, { id: id }, (res) => {
         _t.search(_t.page);
       });
     },
@@ -433,7 +459,7 @@ export default {
       this.search(this.page);
     },
     onMenuChange(val) {
-    //  console.log(val);
+      //  console.log(val);
     },
     handleClick(command) {
       switch (command) {
@@ -451,26 +477,24 @@ export default {
     periodIdSearch() {
       let param = {};
 
-      periodIdSearch(param, res => {
-        res.data.forEach(element => {
-        //  console.log(element);
+      periodIdSearch(param, (res) => {
+        res.data.forEach((element) => {
+          //  console.log(element);
           this.searchItems[0].displayValue.push(element.periodTime);
           this.searchItems[0].value.push(element.periodTime);
           this.periodList.push({
-            id:element.periodId,
-            periodTime:element.periodTime
-          })
-
-
+            id: element.periodId,
+            periodTime: element.periodTime,
+          });
         });
       });
-    }
+    },
   },
 
   mounted() {
     this.search(1);
     this.periodIdSearch();
-  }
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -527,9 +551,9 @@ export default {
 }
 
 .mygroud {
-  line-height:150%;
+  line-height: 150%;
   border: 1px solid #dcdfe6;
-  height: 110px;
+  height: 100px;
 }
 .red {
   background-color: rgba(28, 118, 236, 0.12);

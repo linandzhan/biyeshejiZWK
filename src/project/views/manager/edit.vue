@@ -7,10 +7,10 @@
     :before-close="handleClose">
 
     <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="150px">
-      <el-form-item label="姓名" prop="realname">
-        <el-input v-model="formValidate.realname" placeholder="输入姓名"></el-input>
+      <el-form-item label="姓名" prop="username">
+        <el-input v-model="formValidate.username" placeholder="输入姓名"></el-input>
       </el-form-item>
-      <el-form-item label="头像" v-if="isFinished">
+      <!-- <el-form-item label="头像" v-if="isFinished">
         <upload
           @on-transport-file-list="handleTransportFileList"
           :file-list="formValidate.avatar ? formValidate.avatar.split(';') : []"
@@ -18,16 +18,16 @@
           :limit="1"
         >
         </upload>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="手机号" prop="phone">
         <el-input v-model="formValidate.phone" placeholder="输入手机号"></el-input>
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="formValidate.email" placeholder="输入邮箱"></el-input>
+      <el-form-item label="状态" prop="type">
+        <el-input v-model="formValidate.type" placeholder="输入邮箱"></el-input>
       </el-form-item>
-      <el-form-item label="备注" prop="comment">
+      <!-- <el-form-item label="备注" prop="comment">
         <el-input v-model="formValidate.comment" placeholder="输入备注"></el-input>
-      </el-form-item>
+      </el-form-item> -->
 
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -146,7 +146,7 @@
       get(id) {
         this.isFinished = false;
         get({id: id}, res => {
-          this.formValidate = res;
+          this.formValidate = res.data;
           this.isFinished = true;
         });
       }

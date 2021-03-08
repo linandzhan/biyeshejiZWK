@@ -43,7 +43,7 @@
     >
   </el-dialog>
 </template>
-
+  
   <script>
 import emitter from "@/framework/mixins/emitter";
 import { save, culculateDiscount, reduceBalance } from "./user-service";
@@ -138,13 +138,12 @@ export default {
 
       reduceBalance(param, res => {
         this.$message.success("扣费成功");
-                this.$refs['formValidate'].resetFields();
         this.$emit("on-save-success");
       });
     }
   }
 };
 </script>
-
+  
   <style>
 </style>
